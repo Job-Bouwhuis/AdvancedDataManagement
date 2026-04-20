@@ -1,0 +1,14 @@
+Table pizza_sales {
+  order_details_id integer
+  order_id integer
+  pizza_id varchar
+  quantity integer
+  order_date date
+  order_time time
+  unit_price numeric
+  total_price numeric
+  pizza_size varchar
+  pizza_category varchar
+  pizza_ingredients text
+  pizza_name varchar
+}

@@ -1,0 +1,8 @@
+version: 2
+
+sources:
+  - name: customer_leaving
+    schema: main
+    tables:
+      - name: customers
+        description: Raw customer dataset with behaviour features and churn label.

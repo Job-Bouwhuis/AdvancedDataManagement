@@ -1,0 +1,39 @@
+
+version: 2
+
+models:
+  - name: stg_breeders
+    description: "Staging table for breeders data"
+    docs:
+      node_color: "maroon"  # You can use color names or hex codes
+    columns:
+      - name: breeders_name
+        description: "Name of the breeder"
+        data_type: "STRING"
+        tests:
+          - unique:
+              config:
+                severity: warn
+          - not_null:
+              config:
+                severity: warn
+      - name: email
+        description: "Email contact of the breeder"
+        data_type: "STRING"
+      - name: distance_from_purchaser
+        description: "Distance from the purchaser in miles"
+        data_type: "INTEGER"
+  - name: stg_breeders_dogs
+    description: "Staging table for breeders_dogs data"
+    docs:
+      node_color: "maroon"  # You can use color names or hex codes
+    columns:
+      - name: dog_id
+        description: "Unique identifier for the dog"
+        data_type: "INTEGER"
+      - name: breed
+        description: "Breed of the dog"
+        data_type: "STRING"
+      - name: dob
+        description: "Date of birth of the dog"
+        data_type: "DATE"

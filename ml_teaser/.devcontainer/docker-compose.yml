@@ -1,0 +1,10 @@
+services:
+  python:
+    image: teachercraig/adm-course:2026.1
+    container_name: adm-ml-teaser-craig
+    volumes:
+      - ..:/adm-ml-teaser-craig:cached
+    working_dir: /adm-ml-teaser-craig
+    command: sleep infinity
+    environment:
+      - PYTHONUNBUFFERED=1

@@ -1,0 +1,32 @@
+
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+
+# Jupyter checkpoints (if you add notebooks later)
+.ipynb_checkpoints/
+
+# VS Code local settings (keep only devcontainer config)
+.vscode/
+
+# OS-specific junk
+.DS_Store
+Thumbs.db
+
+# Docker artifacts (none if using compose only)
+*.pid
+*.log
+
+# if you run virtualenv locally (Unlikely but why not be safe)
+venv/
+.env/
+
+# Do NOT ignore:
+# - .devcontainer/
+# - .dbcode/
+# - All .db and .duckdb files (students need these)
+
+target/
+dbt_packages/
+logs/

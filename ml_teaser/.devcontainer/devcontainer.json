@@ -1,0 +1,16 @@
+{
+  "name": "ADM ml_teaser_craig",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "python",
+  "workspaceFolder": "/adm-ml-teaser-craig",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "dbcode.dbcode",
+        "dbdiagram.dbdiagram-vscode",
+        "ms-python.python"
+      ]
+    }
+  },
+  "forwardPorts": [8888]
+}

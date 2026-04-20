@@ -1,0 +1,23 @@
+{
+  "name": "ADM Working (Gate A/B/C + Exam)",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "python",
+  "workspaceFolder": "/adm-workspace",
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "markdown-pdf.executablePath": "/usr/bin/chromium",
+        "markdown-pdf.chromiumArgs": ["--no-sandbox", "--disable-dev-shm-usage"]
+      },
+      "extensions": [
+        "dbcode.dbcode",
+        "dbdiagram.dbdiagram-vscode",
+        "ms-python.python",
+        "mushan.vscode-paste-image",
+        "yzane.markdown-pdf",
+        "tomoki1207.pdf"
+      ]
+    }
+  },
+  "forwardPorts": [8888]
+}
