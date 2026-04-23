@@ -1,0 +1,6 @@
+student_enrolment:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: /adm-workspace/gatekeepers/gate-bc-student-enrolment/resources/student_enrolment.duckdb

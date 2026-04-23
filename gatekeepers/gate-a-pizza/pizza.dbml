@@ -1,0 +1,62 @@
+  Table pizza_sales {
+    order_details_id integer
+    order_id integer
+    pizza_id varchar
+    quantity integer
+    order_date date
+    order_time time
+    unit_price numeric
+    total_price numeric
+    pizza_size varchar
+    pizza_category varchar
+    pizza_ingredients text
+    pizza_name varchar
+  }
+
+ ^^^ original
+
+ vvv new
+
+Table Pizzas {
+   id int pk
+   priceCents int
+   size int
+   category varchar
+   name varchar
+}
+
+Table Categories {
+  id int pk
+  name varchar
+}
+
+Table CategoryPizza {
+  pizzaId int pk [ref :> Pizzas.id]
+  categoryId int pk [ref :> Categories.id]
+}
+
+Table Ingredients {
+  id int pk
+  name varchar
+}
+
+Table IngredientPizza {
+  ingredientId int pk [ref :> Ingredients.id]
+  pizzaId int pk [ref :> Pizzas.id]
+}
+
+Table Orders {
+  id int pk
+  orderTime time
+  orderDate date
+
+}
+
+Table OrderItem {
+  orderId int pk [ref :> Orders.id]
+  pizzaId int pk [ref :> Pizzas.id]
+  count int
+}
+
+
+

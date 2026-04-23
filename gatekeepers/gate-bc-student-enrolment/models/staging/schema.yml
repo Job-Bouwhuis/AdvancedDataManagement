@@ -1,0 +1,48 @@
+version: 2
+
+models:
+  - name: stg_student_enrolments
+    description: Cleaned student enrolment events
+    columns:
+      - name: student_id
+        description: Unique identifier of a student
+        tests:
+          - not_null
+
+      - name: programme_code
+        description: Identifier of the enrolled programme
+        tests:
+          - not_null
+
+      - name: enrolment_date
+        description: Date the student enrolled
+        tests:
+          - not_null
+
+      - name: enrolment_status
+        description: Normalised enrolment status
+        tests:
+          - accepted_values:
+              values: ['enrolled', 'withdrawn']
+
+  - name: stg_programmes
+    description: Programme reference data
+    columns:
+      - name: programme_code
+        description: Unique identifier of a programme
+        tests:
+          - not_null
+          - unique
+
+      - name: programme_name
+        description: Human-readable programme name
+
+      - name: start_date
+        description: Official programme start date
+        tests:
+          - not_null
+
+      - name: credits
+        description: Total credits of the programme
+        tests:
+          - not_null

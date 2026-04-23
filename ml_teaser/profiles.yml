@@ -1,0 +1,6 @@
+ml_teaser:
+  target: dev
+  outputs:
+    dev:
+      type: duckdb
+      path: resources/customer_leaving.duckdb
