@@ -1,27 +1,6 @@
-  Table pizza_sales {
-    order_details_id integer
-    order_id integer
-    pizza_id varchar
-    quantity integer
-    order_date date
-    order_time time
-    unit_price numeric
-    total_price numeric
-    pizza_size varchar
-    pizza_category varchar
-    pizza_ingredients text
-    pizza_name varchar
-  }
-
- ^^^ original
-
- vvv new
-
 Table Pizzas {
    id int pk
    priceCents int
-   size int
-   category varchar
    name varchar
 }
 
@@ -58,5 +37,10 @@ Table OrderItem {
   count int
 }
 
-
+Table PizzaSizes {
+  id int pk
+  pizzaId int [ref: > Pizzas.id]
+  size varchar
+  priceCents int
+}
 
