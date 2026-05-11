@@ -12,9 +12,9 @@
 
 ## Student Info
 
-**Name:** `<insert here>`
-**Class:** `<insert here>`
-**Teacher:** `<insert here>`
+**Name:** `Job Bouwhuis`
+**Class:** `2-Sb`
+**Teacher:** `Melanie Bonnes`
 
 ---
 
