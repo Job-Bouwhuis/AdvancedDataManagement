@@ -31,7 +31,8 @@ Describe what you added to `sources.yml` to register the `breeds` table.
 **What you added (paste relevant section of sources.yml):**
 
 ```yaml
-<insert here>
+      - name: breeds
+        description: "Table loaded directly from source containing information about dog breeds."
 ```
 
 ---

@@ -1,10 +1,12 @@
 version: 2
 
-sources:
+sources:                    
   - name: dogs
     database: dogs
     schema: main
     tables:
+      - name: breeds
+        description: "Table loaded directly from source containing information about dog breeds."
       - name: breeders
         description: "Table loaded directly from source containing information about dog breeders."
       - name: breeders_dogs
