@@ -37,3 +37,15 @@ models:
       - name: dob
         description: "Date of birth of the dog"
         data_type: "DATE"
+  - name: stg_breeds
+    description: "Staging table for dogs data"
+    docs:
+      node_color: "maroon"
+    columns:
+      - name: breed
+        description: "Breed name of the dog (standardized)"
+        data_type: "STRING"
+        tests:
+          - not_null:
+              config:
+                severity: error

@@ -44,7 +44,27 @@ Describe what you added to `sources.yml` to register the `breeds` table.
 Paste your completed staging model below:
 
 ```sql
-<insert SQL here>
+WITH source AS (
+    SELECT *
+    FROM {{ source('dogs', 'breeds') }}
+),
+
+renamed AS (
+    SELECT
+        lower(trim(breed)) AS breed,
+        "group" AS breed_group,
+        score,
+        longevity,
+        purchase_price,
+        grooming,
+        size,
+        weight,
+        height
+    FROM source
+)
+
+SELECT *
+FROM renamed
 ```
 
 **Explain your key decisions (in your own words):**
@@ -52,7 +72,7 @@ Paste your completed staging model below:
 * What columns did you rename or standardise, and why?
 * Were any columns removed or cast to a different type? Why?
 
-`<insert explanation here>`
+`I renamed group to breed_group because group is a SQL keyword and the new name is clearer. I also standardized breed and size by trimming whitespace and converting them to lowercase to ensure consistent values for analysis.`
 
 ---
 
@@ -61,42 +81,60 @@ Paste your completed staging model below:
 **Paste the relevant section of `schema.yml` covering `stg_dogs`:**
 
 ```yaml
-<insert here>
+  - name: stg_breeds
+    description: "Staging table for dogs data"
+    docs:
+      node_color: "maroon"
+    columns:
+      - name: breed
+        description: "Breed name of the dog (standardized)"
+        data_type: "STRING"
+        tests:
+          - not_null:
+              config:
+                severity: error
+          - unique:
+                config:
+                    severity: warn
 ```
 
 **Test severity choice:**
 
 Which test did you configure with an explicit severity (`error` or `warn`)?
 
-`<insert test name here>`
+`a doggo must have a breed, otherwise its magic. therefor no breed is error`
 
 **Why did you choose that severity for that test?**
 
-`<insert explanation here>`
+`a breed without breed`
 
 **What kind of data issue does it represent?**
 
-`<insert explanation here>`
+`corrupt data for that specific breed`
 
 ---
 
 ## 1.4 — Custom SQL Test
 
-**File created:** `tests/<insert filename here>.sql`
+**File created:** `tests/test_breed_size.sql`
 
 **Paste your custom test SQL:**
 
 ```sql
-<insert SQL here>
+{{ config(severity='warn') }}
+
+select *
+from {{ ref('stg_breeds') }}
+where size not in ('small', 'medium', 'large')
 ```
 
 **Which rule from `data_dictionary.md` does this test validate?**
 
-`<insert here>`
+`the one about size`
 
 **What does a returned row mean (i.e. what counts as invalid)?**
 
-`<insert here>`
+`a returned row means said row is invalid. in this case, that the size column does not have the value "small", "medium", or "large"`
 
 ---
 
@@ -104,11 +142,11 @@ Which test did you configure with an explicit severity (`error` or `warn`)?
 
 Did any tests fail or warn when you ran `dbt test`?
 
-`<insert: yes / no>`
+`no`
 
 **If yes — what failed, and what did you decide to do about it?**
 
-`<insert decision and reasoning here>`
+`n.a`
 
 ---
 
@@ -116,7 +154,7 @@ Did any tests fail or warn when you ran `dbt test`?
 
 **Screenshot — dbt docs showing stg_dogs model, tests visible, and lineage from source → staging:**
 
-![screenshot]
+![alt text](image-6.png)
 
 ---
 
@@ -124,7 +162,7 @@ Did any tests fail or warn when you ran `dbt test`?
 
 **Screenshot — terminal output of `dbt run` succeeding:**
 
-![screenshot]
+![alt text](image-7.png)
 
 ---
 
