@@ -174,13 +174,11 @@ Did any tests fail or warn when you ran `dbt test`?
 
 ## 2.1 — Analytical Question
 
-**Your analytical question:**
-
-`<insert here>`
+`How have enrolment counts changed over time across programmes, including the timing and volume of late enrolments?`
 
 **Justification — why is this question aligned with the user story?**
 
-`<insert here>`
+`It looks at basic enrolment trends over time so you can see how numbers change and when late enrolments happen before doing any grouping.`
 
 ---
 
@@ -188,15 +186,19 @@ Did any tests fail or warn when you ran `dbt test`?
 
 **Staging models required:**
 
-`<insert here>`
+`stg_student_enrolments (from raw_student_enrolments)`
+`stg_programmes (from raw_programmes)`
 
 **Join key used to combine them:**
 
-`<insert here>`
+`programme_code`
 
 **Base fields carried forward:**
 
-`<insert here>`
+`student_id`
+`programme_code`
+`enrolment_date`
+`enrolment_status`
 
 ---
 
@@ -206,14 +208,9 @@ For each added field, complete the table below:
 
 | Field name            | Type (Calculated / Categorical) | How it is derived or defined                                 | Why it is needed  |
 | --------------------- | ------------------------------- | ------------------------------------------------------------ | ----------------- |
-| `days_before_start` | Calculated                      | `start_date - enrolment_date`                              | `<insert here>` |
-| `enrolment_period`  | Categorical                     | early / on_time / late — derived from `days_before_start` | `<insert here>` |
+| `days_before_start` | Calculated                      | `start_date - enrolment_date`                              | `to quickly see how many days until the enrolment starts` |
+| `enrolment_period`  | Categorical                     | early / on_time / late — derived from `days_before_start` | `to understand whether students are enrolling well before, close to, or after the programme start date for capacity and planning decisions` |
 
-Add any additional fields you chose to include:
-
-| Field name   | Type         | How derived  | Why needed   |
-| ------------ | ------------ | ------------ | ------------ |
-| `<insert>` | `<insert>` | `<insert>` | `<insert>` |
 
 ---
 
@@ -221,7 +218,7 @@ Add any additional fields you chose to include:
 
 **Screenshot of your `int_enrolments` DBML diagram (from dbdiagram.io or VS Code extension):**
 
-![screenshot]
+![alt text](image-8.png)
 
 ---
 

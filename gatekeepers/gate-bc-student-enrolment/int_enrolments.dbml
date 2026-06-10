@@ -1,0 +1,15 @@
+Table int_enrolments {
+  student_id varchar
+  programme_code varchar
+  enrolment_date date
+  enrolment_status varchar
+
+  programme_name varchar
+  faculty varchar
+  programme_duration int
+
+  Note: 'Intermediate enrolment model joining student enrolments with programme reference data. No aggregation applied.'
+}
+
+//Ref: int_enrolments.programme_code > stg_programmes.programme_code
+//Ref: int_enrolments.programme_code > stg_student_enrolments.programme_code
