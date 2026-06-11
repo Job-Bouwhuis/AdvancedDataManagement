@@ -45,26 +45,59 @@ Paste your completed staging model below:
 
 ```sql
 WITH source AS (
+
     SELECT *
     FROM {{ source('dogs', 'breeds') }}
+
 ),
 
-renamed AS (
+decoded AS (
+
     SELECT
         lower(trim(breed)) AS breed,
-        "group" AS breed_group,
-        score,
-        longevity,
-        purchase_price,
-        grooming,
-        size,
-        weight,
-        height
+        lower(trim("group")) AS breed_group,
+
+        TRY_CAST(REPLACE(score, ',', '.') AS DECIMAL(5,2)) AS score,
+        TRY_CAST(REPLACE(longevity, ',', '.') AS DECIMAL(5,1)) AS longevity,
+
+        CAST(ailments AS INTEGER) AS ailments,
+        CAST(purchase_price AS INTEGER) AS purchase_price,
+
+        CASE grooming
+            WHEN 1 THEN 'daily'
+            WHEN 2 THEN 'weekly'
+            WHEN 3 THEN 'few_weeks'
+            ELSE NULL
+        END AS grooming,
+
+        CASE children
+            WHEN 1 THEN 'high'
+            WHEN 2 THEN 'medium'
+            WHEN 3 THEN 'low'
+            ELSE NULL
+        END AS children_suitability,
+
+        lower(trim(size)) AS size,
+
+        TRY_CAST(REPLACE(NULLIF(weight, 'NA'), ',', '.') AS DECIMAL(5,2)) AS weight,
+
+        TRY_CAST(NULLIF(height, 'NA') AS INTEGER) AS height,
+
+        CASE TRIM(repetition)
+            WHEN '<5' THEN '<5'
+            WHEN '5-15' THEN '5-15'
+            WHEN '15-25' THEN '15-25'
+            WHEN '25-40' THEN '25-40'
+            WHEN '40-80' THEN '40-80'
+            WHEN '>80' THEN '>80'
+            ELSE NULL
+        END AS repetition_bucket
+
     FROM source
 )
 
 SELECT *
-FROM renamed
+FROM decoded
 ```
 
 **Explain your key decisions (in your own words):**
@@ -81,21 +114,70 @@ FROM renamed
 **Paste the relevant section of `schema.yml` covering `stg_dogs`:**
 
 ```yaml
-  - name: stg_breeds
+ - name: stg_breeds
     description: "Staging table for dogs data"
     docs:
       node_color: "maroon"
     columns:
       - name: breed
-        description: "Breed name of the dog (standardized)"
-        data_type: "STRING"
+        description: "Breed name of the dog"
+        data_type: STRING
         tests:
           - not_null:
               config:
                 severity: error
           - unique:
-                config:
-                    severity: warn
+              config:
+                severity: error
+
+      - name: breed_group
+        description: "AKC breed group classification"
+        data_type: STRING
+
+      - name: score
+        description: "AKC score"
+        data_type: NUMBER
+
+      - name: longevity
+        description: "Typical lifespan in years"
+        data_type: NUMBER
+
+      - name: purchase_price
+        description: "Average purchase price (USD equivalent)"
+        data_type: NUMBER
+
+      - name: grooming
+        description: "Grooming requirement decoded from numeric encoding (daily/weekly/few_weeks)"
+        data_type: STRING
+
+      - name: children_suitability
+        description: "Suitability for children decoded from numeric encoding (high/medium/low)"
+        data_type: STRING
+
+      - name: size
+        description: "Dog size category"
+        data_type: STRING
+        tests:
+          - accepted_values:
+              values: ['small', 'medium', 'large']
+              config:
+                severity: error
+
+      - name: weight
+        description: "Typical weight in kg"
+        data_type: NUMBER
+
+      - name: height
+        description: "Height at shoulder in cm"
+        data_type: NUMBER
+
+      - name: repetition_bucket
+        description: "Training difficulty bucket"
+        data_type: STRING
+
+      - name: ailments
+        description: "Number of serious genetic ailments"
+        data_type: NUMBER
 ```
 
 **Test severity choice:**
@@ -121,20 +203,21 @@ Which test did you configure with an explicit severity (`error` or `warn`)?
 **Paste your custom test SQL:**
 
 ```sql
-{{ config(severity='warn') }}
+{{ config(severity='error') }}
 
-select *
-from {{ ref('stg_breeds') }}
-where size not in ('small', 'medium', 'large')
+SELECT *
+FROM {{ ref('stg_breeds') }}
+WHERE weight IS NOT NULL
+  AND ( weight < 1 OR weight > 100 )
 ```
 
 **Which rule from `data_dictionary.md` does this test validate?**
 
-`the one about size`
+`the one about weight`
 
 **What does a returned row mean (i.e. what counts as invalid)?**
 
-`a returned row means said row is invalid. in this case, that the size column does not have the value "small", "medium", or "large"`
+`a returned row means said row is invalid. in this case, that the weight of the dog is outside the range 1..100 (inclusive)`
 
 ---
 

@@ -37,15 +37,69 @@ models:
       - name: dob
         description: "Date of birth of the dog"
         data_type: "DATE"
+
   - name: stg_breeds
     description: "Staging table for dogs data"
     docs:
       node_color: "maroon"
     columns:
+
       - name: breed
-        description: "Breed name of the dog (standardized)"
-        data_type: "STRING"
+        description: "Breed name of the dog"
+        data_type: STRING
         tests:
           - not_null:
               config:
                 severity: error
+          - unique:
+              config:
+                severity: error
+
+      - name: breed_group
+        description: "AKC breed group classification"
+        data_type: STRING
+
+      - name: score
+        description: "AKC score"
+        data_type: NUMBER
+
+      - name: longevity
+        description: "Typical lifespan in years"
+        data_type: NUMBER
+
+      - name: purchase_price
+        description: "Average purchase price (USD equivalent)"
+        data_type: NUMBER
+
+      - name: grooming
+        description: "Grooming requirement decoded from numeric encoding (daily/weekly/few_weeks)"
+        data_type: STRING
+
+      - name: children_suitability
+        description: "Suitability for children decoded from numeric encoding (high/medium/low)"
+        data_type: STRING
+
+      - name: size
+        description: "Dog size category"
+        data_type: STRING
+        tests:
+          - accepted_values:
+              values: ['small', 'medium', 'large']
+              config:
+                severity: error
+
+      - name: weight
+        description: "Typical weight in kg"
+        data_type: NUMBER
+
+      - name: height
+        description: "Height at shoulder in cm"
+        data_type: NUMBER
+
+      - name: repetition_bucket
+        description: "Training difficulty bucket"
+        data_type: STRING
+
+      - name: ailments
+        description: "Number of serious genetic ailments"
+        data_type: NUMBER
