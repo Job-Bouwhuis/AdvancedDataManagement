@@ -22,10 +22,10 @@ WITH training_stats AS (
 
 new_customer_normalised AS (
     SELECT
-        (NULL - s.min_f1) / NULLIF(s.max_f1 - s.min_f1, 0) AS feature_1_n,  -- TODO: enter value for your feature_1
-        (NULL - s.min_f2) / NULLIF(s.max_f2 - s.min_f2, 0) AS feature_2_n,  -- TODO: enter value for your feature_2
-        (NULL - s.min_f3) / NULLIF(s.max_f3 - s.min_f3, 0) AS feature_3_n,  -- TODO: enter value for your feature_3
-        (NULL - s.min_f4) / NULLIF(s.max_f4 - s.min_f4, 0) AS feature_4_n   -- TODO: enter value for your feature_4
+        (2 - s.min_f1) / NULLIF(s.max_f1 - s.min_f1, 0) AS feature_1_n, 
+        (3 - s.min_f2) / NULLIF(s.max_f2 - s.min_f2, 0) AS feature_2_n,  
+        (18 - s.min_f3) / NULLIF(s.max_f3 - s.min_f3, 0) AS feature_3_n, 
+        (2 - s.min_f4) / NULLIF(s.max_f4 - s.min_f4, 0) AS feature_4_n  
     FROM training_stats s
 ),
 

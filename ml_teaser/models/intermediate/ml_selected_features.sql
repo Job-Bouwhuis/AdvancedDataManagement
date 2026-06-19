@@ -12,6 +12,9 @@
 
 SELECT
     customer_id,
-    -- your 4 features here (aliased as feature_1 through feature_4)
+    months_as_customer AS feature_1,
+    hours_watched_last_month AS feature_2,
+    days_since_last_login AS feature_3,
+    support_calls_last_month AS feature_4,
     will_leave
 FROM {{ ref('ml_train_customers') }}

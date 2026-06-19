@@ -6,6 +6,9 @@
 -- Output columns: test_customer_id, train_customer_id, train_will_leave, distance
 
 SELECT
-    -- your column list here
-FROM {{ ref('ml_test_customers_n') }}  t
+    t.customer_id AS test_customer_id,
+    tr.customer_id AS train_customer_id,
+    tr.will_leave AS train_will_leave,
+    {{ calculate_distance('t', 'tr') }} AS distance
+FROM {{ ref('ml_test_customers_n') }} t
 CROSS JOIN {{ ref('ml_train_customers_n') }} tr

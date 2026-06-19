@@ -1,12 +1,39 @@
 {{ config(materialized='table') }}
 
--- Normalise test customer features using the same Min-Max scaling.
--- IMPORTANT: min/max must come from the TRAINING set (ml_selected_features),
--- not the test set, so both sets are on the same scale.
--- Output columns: customer_id, feature_1_n, feature_2_n, feature_3_n, feature_4_n, will_leave
---
--- Hint: ml_test_customers still has the original column names.
--- Use a CTE to apply the same feature aliases you chose in ml_selected_features
--- before normalising (e.g. days_since_last_login AS feature_1).
+WITH feature_stats AS (
+    SELECT
+        MIN(feature_1) AS min_1,
+        MAX(feature_1) AS max_1,
+        MIN(feature_2) AS min_2,
+        MAX(feature_2) AS max_2,
+        MIN(feature_3) AS min_3,
+        MAX(feature_3) AS max_3,
+        MIN(feature_4) AS min_4,
+        MAX(feature_4) AS max_4
+    FROM {{ ref('ml_selected_features') }}
+),
 
--- your SQL here
+test_features AS (
+    SELECT
+        customer_id,
+        months_as_customer AS feature_1,
+        hours_watched_last_month AS feature_2,
+        days_since_last_login AS feature_3,
+        support_calls_last_month AS feature_4,
+        will_leave
+    FROM {{ ref('ml_test_customers') }}
+),
+
+normalized AS (
+    SELECT
+        t.customer_id,
+        (t.feature_1 - fs.min_1) / NULLIF(fs.max_1 - fs.min_1, 0) AS feature_1_n,
+        (t.feature_2 - fs.min_2) / NULLIF(fs.max_2 - fs.min_2, 0) AS feature_2_n,
+        (t.feature_3 - fs.min_3) / NULLIF(fs.max_3 - fs.min_3, 0) AS feature_3_n,
+        (t.feature_4 - fs.min_4) / NULLIF(fs.max_4 - fs.min_4, 0) AS feature_4_n,
+        t.will_leave
+    FROM test_features t
+    CROSS JOIN feature_stats fs
+)
+
+SELECT * FROM normalized

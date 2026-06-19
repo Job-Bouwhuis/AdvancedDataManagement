@@ -4,5 +4,6 @@
 -- without the original row order influencing the result.
 
 SELECT
-    -- your SQL here
+    *,
+    RANDOM() AS random_value
 FROM {{ ref('stg_customers') }}

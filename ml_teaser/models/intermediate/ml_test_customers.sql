@@ -5,4 +5,4 @@
 
 SELECT *
 FROM {{ ref('ml_randomize_customers') }}
--- add your WHERE clause here
+WHERE random_value > 0.70

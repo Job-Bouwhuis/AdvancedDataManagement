@@ -1,0 +1,76 @@
+version: 2
+
+sources:
+  - name: raw
+    schema: main 
+    tables:
+      - name: raw_lap_times
+      - name: raw_weather
+      - name: raw_session_results
+      - name: raw_race_control
+
+models:
+  - name: stg_lap_times
+    description: Cleaned lap-by-lap timing data for finished drivers only
+    columns:
+      - name: driver_id
+        description: Driver abbreviation (e.g., HAM, VER)
+        tests:
+          - not_null
+      - name: team_name
+        description: Team name
+      - name: race_id
+        description: Unique race identifier (year-circuit)
+        tests:
+          - not_null
+      - name: circuit
+        description: Circuit name
+      - name: race_year
+        description: Year of the race
+      - name: lap_number
+        description: Lap number in the race
+        tests:
+          - not_null
+      - name: lap_time_seconds
+        description: Lap time converted to seconds
+        tests:
+          - not_null
+      - name: tire_compound
+        description: Type of tire compound used
+      - name: tire_life
+        description: Number of laps tire has been used
+    tests:
+      - unique:
+          column_name: "(driver_id || '-' || race_id || '-' || lap_number)"
+
+  - name: stg_session_results
+    description: Cleaned race results with finished status
+    columns:
+      - name: driver_id
+        description: Unique driver identifier
+        tests:
+          - not_null
+      - name: race_id
+        description: Unique race identifier
+        tests:
+          - not_null
+      - name: is_finished
+        description: Boolean flag for finished drivers
+      - name: final_position
+        description: Final race position
+
+  - name: stg_weather
+    description: Aggregated weather data per race
+    columns:
+      - name: race_id
+        description: Unique race identifier
+        tests:
+          - not_null
+      - name: is_wet
+        description: Boolean flag for wet conditions (1=wet, 0=dry)
+      - name: weather_condition
+        description: Wet or Dry
+      - name: avg_track_temp
+        description: Average track temperature during race
+      - name: track_temp_variation
+        description: Range of track temperatures during race
