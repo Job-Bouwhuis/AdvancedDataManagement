@@ -1,5 +1,4 @@
 {{ config(materialized='view') }}
-
 WITH weather_aggregated AS (
     SELECT
         race_id,
@@ -21,7 +20,7 @@ WITH weather_aggregated AS (
         MAX(TrackTemp) AS max_track_temp,
         
         MAX(TrackTemp) - MIN(TrackTemp) AS track_temp_variation,
-        -- Add quality indicators
+        
         COUNT(*) AS reading_count,
         COUNT(CASE WHEN AirTemp IS NOT NULL THEN 1 END) AS air_temp_readings,
         COUNT(CASE WHEN TrackTemp IS NOT NULL THEN 1 END) AS track_temp_readings

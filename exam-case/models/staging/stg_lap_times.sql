@@ -1,5 +1,4 @@
 {{ config(materialized='view') }}
-
 WITH parsed_laps AS (
     SELECT
         Driver AS driver_abbreviation,

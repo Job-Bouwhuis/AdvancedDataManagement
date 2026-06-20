@@ -1,5 +1,4 @@
 {{ config(materialized='table') }}
-
 SELECT
     {{ dbt_utils.generate_surrogate_key(['circuit', 'is_wet', 'race_year']) }} AS circuit_weather_key,
     circuit,

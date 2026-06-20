@@ -1,5 +1,4 @@
 {{ config(materialized='table') }}
-
 SELECT DISTINCT
     driver_id,
     team_name

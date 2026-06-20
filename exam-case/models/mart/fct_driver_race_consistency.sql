@@ -1,5 +1,4 @@
 {{ config(materialized='table') }}
-
 SELECT
 
     {{ dbt_utils.generate_surrogate_key(['driver_id', 'race_id']) }} AS consistency_key,

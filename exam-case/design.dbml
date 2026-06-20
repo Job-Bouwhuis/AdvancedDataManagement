@@ -1,5 +1,4 @@
-
-Table stg_lap_times {
+Table stg_lap_times {  
   driver_id varchar
   team_name varchar
   race_id varchar
@@ -57,6 +56,13 @@ Table int_race_driver_consistency {
   weather_condition varchar
   avg_track_temp float
   track_temp_variation float
+}
+
+Table int_team_season_points {
+  team_name varchar
+  race_year integer
+  total_team_points float
+  races_participated integer
 }
 
 Table dim_driver {

@@ -1,5 +1,4 @@
 {{ config(materialized='table') }}
-
 SELECT DISTINCT
     race_id,
     circuit,

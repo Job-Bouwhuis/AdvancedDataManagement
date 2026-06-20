@@ -1,5 +1,4 @@
 {{ config(materialized='view') }}
-
 WITH cleaned_results AS (
     SELECT
         LOWER(DriverId) AS driver_id,

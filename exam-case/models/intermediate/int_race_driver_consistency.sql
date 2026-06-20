@@ -1,10 +1,9 @@
 {{ config(materialized='table') }}
-
 WITH finished_drivers AS (
     SELECT 
         DriverNumber,
         race_id,
-        driver_id  -- Keep the full name for the final output
+        driver_id
     FROM {{ ref('stg_session_results') }}
     WHERE is_finished = TRUE
 ),
@@ -21,7 +20,6 @@ driver_laps AS (
         l.lap_time_seconds,
         l.tire_compound,
         l.tire_life,
-        -- Get the full driver name from session results
         f.driver_id AS driver_id,
         w.is_wet,
         w.weather_condition,

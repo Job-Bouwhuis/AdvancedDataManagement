@@ -155,6 +155,7 @@ The design allows analysts to drill down from season-level or circuit-level view
 # Phase 4 — Dashboard
 
 ![alt text](image-1.png)
+![alt text](image-3.png)
 
 ## Grain and Data Interpretation
 
