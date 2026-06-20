@@ -1,8 +1,10 @@
 import duckdb
 from pathlib import Path
+import re
 
-# Connect
-con = duckdb.connect('f1.duckdb')
+# Connect to a new database file
+db_path = 'f1_loaded.duckdb'
+con = duckdb.connect(db_path)
 con.execute("CREATE SCHEMA IF NOT EXISTS raw;")
 
 # Get all files
@@ -11,23 +13,26 @@ files = list(raw_dir.glob('*'))
 
 # Function to extract info from filename
 def get_file_info(filename):
-    """Extract info from filename using simple string matching"""
+    """Extract info from filename using regex pattern matching"""
     name = filename.name
     
     # Extract year (first 4 digits)
-    import re
     year_match = re.search(r'(\d{4})', name)
     year = year_match.group(1) if year_match else None
     
-    # Extract circuit
-    if 'Azerbaijan' in name:
-        circuit = 'Azerbaijan'
-    elif 'Italian' in name:
-        circuit = 'Italian'
-    elif 'Dutch' in name:
-        circuit = 'Dutch'
+    # Extract circuit using generic pattern - look for anything before "Grand Prix"
+    circuit_match = re.search(r'(.+?) Grand Prix', name)
+    if circuit_match:
+        circuit = circuit_match.group(1).strip()
     else:
-        circuit = 'Unknown'
+        # If no "Grand Prix" found, try to extract circuit from filename
+        # Look for patterns like "_Italian_" or "_Azerbaijan_" etc.
+        circuit_pattern = r'_(.+?)_'
+        circuit_match = re.search(circuit_pattern, name)
+        if circuit_match:
+            circuit = circuit_match.group(1).strip()
+        else:
+            circuit = 'Unknown'
     
     # Extract file type
     if 'laps' in name.lower():
@@ -102,3 +107,4 @@ for table in tables:
     print(f"  {table[0]}: {count} rows")
 
 con.close()
+print(f"\nDatabase successfully created at {db_path}")

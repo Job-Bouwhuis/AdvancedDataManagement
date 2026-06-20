@@ -11,66 +11,106 @@ sources:
 
 models:
   - name: stg_lap_times
-    description: Cleaned lap-by-lap timing data for finished drivers only
+    description: Cleaned lap-by-lap timing data for finished drivers only. Contains validated lap times with quality flags for monitoring data integrity.
     columns:
-      - name: driver_id
-        description: Driver abbreviation (e.g., HAM, VER)
+      - name: driver_abbreviation
+        description: Driver abbreviation (e.g., HAM, VER) - standardized 3-letter code
         tests:
           - not_null
       - name: team_name
-        description: Team name
+        description: Team name (e.g., Mercedes, Ferrari)
       - name: race_id
-        description: Unique race identifier (year-circuit)
+        description: Unique race identifier (year-circuit) - standardized format for joining with other models
         tests:
           - not_null
       - name: circuit
-        description: Circuit name
+        description: Circuit name (e.g., Silverstone, Monza)
       - name: race_year
-        description: Year of the race
+        description: Year of the race (e.g., 2023)
       - name: lap_number
-        description: Lap number in the race
+        description: Lap number in the race (1-based index)
         tests:
           - not_null
       - name: lap_time_seconds
-        description: Lap time converted to seconds
+        description: Lap time converted to seconds - validated for reasonableness (0-1200s)
         tests:
           - not_null
       - name: tire_compound
-        description: Type of tire compound used
+        description: Type of tire compound used (e.g., Soft, Medium, Hard)
       - name: tire_life
-        description: Number of laps tire has been used
+        description: Number of laps tire has been used (0 for new tires)
+      - name: race_position
+        description: Final position in the race (1-20 for F1)
+      - name: time_quality_flag
+        description: Quality flag indicating if lap time is valid, invalid, or extremely long
     tests:
       - unique:
-          column_name: "(driver_id || '-' || race_id || '-' || lap_number)"
+          column_name: "(driver_abbreviation || '-' || race_id || '-' || lap_number)"
 
   - name: stg_session_results
-    description: Cleaned race results with finished status
+    description: Cleaned race results with finished status and quality indicators. Contains standardized driver and team information for race analysis.
     columns:
       - name: driver_id
-        description: Unique driver identifier
+        description: Unique driver identifier (lowercase version of original DriverId)
         tests:
           - not_null
+      - name: driver_abbreviation
+        description: Driver abbreviation (e.g., HAM, VER) - standardized 3-letter code
       - name: race_id
-        description: Unique race identifier
+        description: Unique race identifier (year-circuit) - standardized format for joining with other models
         tests:
           - not_null
       - name: is_finished
-        description: Boolean flag for finished drivers
+        description: Boolean flag indicating if driver finished the race (TRUE/FALSE)
       - name: final_position
-        description: Final race position
+        description: Final race position (1-25 for F1 drivers)
+      - name: race_status
+        description: Raw status from source data (Finished, DNF, Retired, etc.)
+      - name: team_name
+        description: Team name (e.g., Mercedes, Ferrari)
+      - name: points
+        description: Points awarded for finishing position (0-25 points)
+      - name: position_quality_flag
+        description: Quality flag indicating if position is valid or missing/invalid
+      - name: status_quality_flag
+        description: Quality flag indicating if status is valid or unknown
+    tests:
+      - unique:
+          column_name: "(driver_id || '-' || race_id)"
 
   - name: stg_weather
-    description: Aggregated weather data per race
+    description: Aggregated weather data per race with quality metrics for monitoring data completeness and reasonableness.
     columns:
       - name: race_id
-        description: Unique race identifier
+        description: Unique race identifier (year-circuit) - standardized format for joining with other models
         tests:
           - not_null
       - name: is_wet
         description: Boolean flag for wet conditions (1=wet, 0=dry)
       - name: weather_condition
-        description: Wet or Dry
+        description: Wet or Dry - derived from rain data
+      - name: avg_air_temp
+        description: Average air temperature during race (degrees Celsius)
       - name: avg_track_temp
-        description: Average track temperature during race
+        description: Average track temperature during race (degrees Celsius)
+      - name: avg_humidity
+        description: Average humidity percentage during race (0-100%)
+      - name: avg_pressure
+        description: Average atmospheric pressure during race (hPa)
+      - name: avg_wind_speed
+        description: Average wind speed during race (km/h)
+      - name: min_track_temp
+        description: Minimum track temperature during race (degrees Celsius)
+      - name: max_track_temp
+        description: Maximum track temperature during race (degrees Celsius)
       - name: track_temp_variation
-        description: Range of track temperatures during race
+        description: Range of track temperatures during race (max - min)
+      - name: reading_count
+        description: Total number of weather readings per race for quality assessment
+      - name: air_temp_readings
+        description: Number of air temperature readings used in average calculation
+      - name: track_temp_readings
+        description: Number of track temperature readings used in average calculation
+    tests:
+      - unique:
+          column_name: "race_id"

@@ -14,7 +14,13 @@ WITH parsed_laps AS (
         TyreLife AS tire_life,
         Position AS race_position,
         TrackStatus,
-        LapTime IS NOT NULL AS has_valid_time
+        LapTime IS NOT NULL AS has_valid_time,
+        
+        CASE 
+            WHEN EXTRACT(EPOCH FROM LapTime::INTERVAL) <= 0 THEN 'Invalid time'
+            WHEN EXTRACT(EPOCH FROM LapTime::INTERVAL) >= 1200 THEN 'Extremely long lap'
+            ELSE 'Valid'
+        END AS time_quality_flag
     FROM {{ source('raw', 'raw_lap_times') }}
 )
 
@@ -29,9 +35,15 @@ SELECT
     lap_time_seconds,
     tire_compound,
     tire_life,
-    race_position
+    race_position,
+    
+    time_quality_flag
 FROM parsed_laps
 WHERE has_valid_time = TRUE
   AND lap_time_seconds > 0  
-  AND lap_time_seconds < 999
+  AND lap_time_seconds < 1200 
   AND lap_time_seconds IS NOT NULL
+  AND driver_abbreviation IS NOT NULL
+  AND race_id IS NOT NULL
+  AND lap_number IS NOT NULL
+ORDER BY race_id, driver_abbreviation, lap_number

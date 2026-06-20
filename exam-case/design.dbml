@@ -1,0 +1,121 @@
+
+Table stg_lap_times {
+  driver_id varchar
+  team_name varchar
+  race_id varchar
+  circuit varchar
+  race_year integer
+  lap_number integer
+  lap_time_seconds float
+  tire_compound varchar
+  tire_life float
+  race_position float
+}
+
+Table stg_session_results {
+  driver_id varchar
+  race_id varchar
+  circuit varchar
+  race_year integer
+  team_name varchar
+  final_position float
+  race_status varchar
+  is_finished boolean
+  points float
+}
+
+Table stg_weather {
+  race_id varchar
+  circuit varchar
+  race_year integer
+  avg_air_temp float
+  avg_track_temp float
+  avg_humidity float
+  avg_pressure float
+  avg_wind_speed float
+  is_wet integer
+  weather_condition varchar
+  min_track_temp float
+  max_track_temp float
+  track_temp_variation float
+}
+
+Table int_race_driver_consistency {
+  driver_id varchar
+  team_name varchar
+  race_id varchar
+  circuit varchar
+  race_year integer
+  total_laps integer
+  avg_lap_time float
+  lap_time_stddev float
+  min_lap_time float
+  max_lap_time float
+  lap_time_range float
+  lap_time_cv float
+  is_wet boolean
+  weather_condition varchar
+  avg_track_temp float
+  track_temp_variation float
+}
+
+Table dim_driver {
+  driver_id varchar [pk]
+  team_name varchar
+}
+
+Table dim_race {
+  race_id varchar [pk]
+  circuit varchar
+  race_year integer
+  is_wet boolean
+  weather_condition varchar
+  avg_track_temp float
+  track_temp_variation float
+}
+
+Table fct_driver_race_consistency {
+  consistency_key varchar [pk]
+  driver_id varchar [ref: > dim_driver.driver_id]
+  race_id varchar [ref: > dim_race.race_id]
+  consistency_stddev float
+  consistency_cv float
+  consistency_range float
+  avg_lap_time float
+  total_laps integer
+  is_wet boolean
+  weather_condition varchar
+  avg_track_temp float
+  loaded_at timestamp
+}
+
+Table fct_driver_season_consistency {
+  season_consistency_key varchar [pk]
+  driver_id varchar [ref: > dim_driver.driver_id]
+  race_year integer [ref: > dim_race.race_year]
+  avg_consistency_stddev float
+  avg_consistency_cv float
+  avg_lap_time_season float
+  races_completed integer
+  avg_consistency_wet float
+  avg_consistency_dry float
+  temp_consistency_correlation float
+  loaded_at timestamp
+}
+
+Table fct_circuit_weather_consistency {
+  circuit_weather_key varchar [pk]
+  circuit varchar [ref: > dim_race.circuit]
+  is_wet boolean [ref: > dim_race.is_wet]
+  weather_condition varchar
+  race_year integer [ref: > dim_race.race_year]
+  avg_consistency_stddev float
+  avg_consistency_cv float
+  avg_lap_time_circuit float
+  avg_laps_completed float
+  drivers_analyzed integer
+  races_analyzed integer
+  avg_track_temp float
+  avg_temp_variation float
+  loaded_at timestamp
+}

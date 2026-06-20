@@ -1,4 +1,3 @@
-
 Name: `<insert here>`
 Class: `<insert here>`
 Teacher: `<insert here>`
@@ -149,13 +148,61 @@ The star schema consists of two dimension tables and three fact tables.
 The design allows analysts to drill down from season-level or circuit-level views to individual driver-race performance. All fact tables share common metrics (CV, stddev) but at different aggregation levels, enabling flexible analysis for race strategy decisions.
 
 ![alt text](image.png)
+![alt text](image-2.png)
 
 ---
 
 # Phase 4 — Dashboard
 
-<!-- Explain: How does grain affect interpretation? What insight does the stakeholder gain from each part of the dashboard? -->
+![alt text](image-1.png)
 
+## Grain and Data Interpretation
+
+The grain of our data significantly impacts how stakeholders interpret driver consistency patterns. Our three fact tables represent different levels of aggregation, each providing unique insights for decision-making:
+
+1. **Driver-Race Granularity** (`fct_driver_race_consistency`): This level shows individual driver performance in specific races, enabling teams to evaluate:
+   - Driver-specific performance under varying conditions
+   - Consistency patterns within single races
+   - Pit strategy effectiveness
+
+2. **Driver-Season Granularity** (`fct_driver_season_consistency`): This roll-up level provides a broader view of driver capabilities across an entire season:
+   - Overall consistency trends for drivers
+   - Performance in wet vs. dry conditions
+   - Seasonal improvement or decline patterns
+
+3. **Circuit-Weather Granularity** (`fct_circuit_weather_consistency`): This perspective helps understand track and weather-specific challenges:
+   - Circuit characteristics that affect consistency
+   - Weather impact on overall racing performance
+   - Optimal tire strategies for different conditions
+
+## Dashboard Structure and Stakeholder Insights
+
+The dashboard is designed to support three primary user groups with distinct analytical needs:
+
+### Race Strategy Team
+- **Key Metrics**: Consistency CV, average lap time, wet/dry comparison
+- **Insights Gained**: 
+  - Which drivers show the most consistent performance in wet conditions
+  - Optimal timing for pit stops based on driver consistency patterns
+  - Circuit-specific strategies based on weather impact
+
+### Performance Analysts
+- **Key Metrics**: Seasonal trends, correlation between temperature and consistency
+- **Insights Gained**:
+  - Long-term driver performance improvements or declines
+  - Relationship between environmental factors and consistency
+  - Comparative analysis across different drivers and circuits
+
+### Technical Development Team
+- **Key Metrics**: Lap time variation, track temperature impact
+- **Insights Gained**:
+  - Tire compound effectiveness under different conditions
+  - Vehicle setup adjustments for maintaining consistency
+  - Predictive modeling based on historical performance patterns
+
+The dashboard's drill-down capabilities allow users to move from high-level season trends to specific race-level insights, supporting data-driven decisions at every level of the organization.
+
+![alt text](image-1.png)
 ---
 
 # Use of Generative AI
