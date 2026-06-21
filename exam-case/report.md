@@ -1,6 +1,6 @@
-Name: `<insert here>`
-Class: `<insert here>`
-Teacher: `<insert here>`
+Name: `job bouwhuis`
+Class: `2Sb`
+Teacher: `Melanie Bonnes`
 
 ---
 
@@ -86,11 +86,8 @@ The DBML diagram in `design.dbml` reflects this structure with all base and deri
 
 ## Analytical Questions
 
-**Pre-defined question:** What is the lap time variability for each driver within each race?
-- **Fact table:** `fct_driver_race_consistency` (primary granularity)
-
-**Additional question:** How does lap time consistency vary between wet and dry race conditions for each driver, and does this consistency pattern differ by circuit?
-- **Fact tables:** `fct_driver_season_consistency` (driver-season roll-up) and `fct_circuit_weather_consistency` (circuit-weather roll-up)
+**question:** What is the lap time variability for each driver within each race?
+**question:** How does lap time consistency vary between wet and dry race conditions for each driver, and does this consistency pattern differ by circuit?
 
 ## Each Row Represents (Grain)
 
@@ -203,7 +200,6 @@ The dashboard is designed to support three primary user groups with distinct ana
 
 The dashboard's drill-down capabilities allow users to move from high-level season trends to specific race-level insights, supporting data-driven decisions at every level of the organization.
 
-![alt text](image-1.png)
 ---
 
 # Use of Generative AI

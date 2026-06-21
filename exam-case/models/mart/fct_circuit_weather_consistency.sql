@@ -8,7 +8,8 @@ SELECT
     
     AVG(lap_time_stddev) AS avg_consistency_stddev,
     AVG(lap_time_cv) AS avg_consistency_cv,
-    AVG(avg_lap_time) AS avg_lap_time_circuit,
+    AVG(avg_lap_time_seconds) AS avg_lap_time_circuit,
+    AVG(avg_lap_time_minutes) AS avg_lap_time_minutes_circuit,
     AVG(total_laps) AS avg_laps_completed,
     COUNT(DISTINCT driver_id) AS drivers_analyzed,
     COUNT(DISTINCT race_id) AS races_analyzed,

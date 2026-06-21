@@ -6,7 +6,9 @@ SELECT
     
     AVG(lap_time_stddev) AS avg_consistency_stddev,
     AVG(lap_time_cv) AS avg_consistency_cv,
-    AVG(avg_lap_time) AS avg_lap_time_season,
+    AVG(avg_lap_time_seconds) AS avg_lap_time_season,
+    AVG(avg_lap_time_minutes) AS avg_lap_time_minutes_season,
+    AVG(total_laps) AS avg_laps_completed,
     COUNT(DISTINCT race_id) AS races_completed,
     
     AVG(CASE WHEN is_wet = TRUE THEN lap_time_stddev ELSE NULL END) AS avg_consistency_wet,

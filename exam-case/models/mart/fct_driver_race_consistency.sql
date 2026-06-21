@@ -9,7 +9,8 @@ SELECT
     lap_time_stddev AS consistency_stddev,
     lap_time_cv AS consistency_cv,
     lap_time_range AS consistency_range,
-    avg_lap_time,
+    avg_lap_time_seconds,
+    avg_lap_time_minutes,
     total_laps,
     
     is_wet,
